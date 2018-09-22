@@ -1,6 +1,10 @@
 #include <iostream>
 #include "mgcoro.h"
 
+//
+//  yield return a;
+//
+
 struct generator : mgcoro::coroutine {
 	int
 	operator()()
@@ -14,6 +18,10 @@ struct generator : mgcoro::coroutine {
 
 	int i{0};
 };
+
+//
+// yield { stmt; }
+//
 
 struct arith_seq : mgcoro::coroutine {
 	int
@@ -30,6 +38,11 @@ struct arith_seq : mgcoro::coroutine {
 
 	int i{0};
 };
+
+//
+// yield return a;
+// yield return b;
+//
 
 struct pair : mgcoro::coroutine {
 	int
@@ -48,6 +61,10 @@ struct pair : mgcoro::coroutine {
 	int b{1};
 };
 
+//
+// yield;
+//
+
 struct duck : mgcoro::coroutine {
 	void
 	operator()()
@@ -64,6 +81,10 @@ struct duck : mgcoro::coroutine {
 	int n{1};
 };
 
+//
+// yield break;
+//
+
 struct no_resume : mgcoro::coroutine {
 	int
 	operator()()
@@ -71,12 +92,17 @@ struct no_resume : mgcoro::coroutine {
 		resumable (this) {
 			// Quit the resumable scope.
 			yield break;
+			yield return 69;
 		}
 		return 42;
 	}
 };
 
-struct branching  : mgcoro::coroutine {
+//
+// fork
+//
+
+struct branching : mgcoro::coroutine {
 	std::string
 	operator()()
 	{
@@ -86,6 +112,8 @@ struct branching  : mgcoro::coroutine {
 					if (i < 2)
 						yield return "parent";
 					else
+						// Note that there is no `yield' here, it forces the
+						// parent to quit.
 						return "parent exiting...";
 					++i;
 				}
