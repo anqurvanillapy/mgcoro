@@ -148,9 +148,9 @@ main()
 	}
 	std::cout << std::endl;
 
-	duck mcdonald;
+	duck donald;
 	for (int i = 0; i < 3; ++i) {
-		mcdonald();
+		donald();
 		std::cout << std::endl;
 	}
 
